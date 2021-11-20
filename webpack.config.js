@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 
@@ -28,7 +29,40 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
+            },
+            // Rule for .sass, .scss and .css files
+            {
+                test: /\.(sa|sc|c)ss$/,
+
+                // Set loader
+                // The chained multiple loaders will be applied one by one
+                // from last to first in the use array
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader
+                    },
+                    {
+                        // This loader resolves url() and @imports inside CSS
+                        loader: "css-loader",
+                    },
+                    {
+                        // Then we apply postCSS fixes like auutoprefixer and minifying
+                        loader: "postcss-loader"
+                    },
+                    {
+                        // First transform SASS to standard CSS
+                        loader: "sass-loader",
+                        options: {
+                            implementation: require("sass")
+                        }
+                    }
+                ]
             }
         ]
-    }
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'bundle.css'
+        })
+    ]
 }
