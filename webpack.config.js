@@ -16,5 +16,19 @@ module.exports = {
 
     // Default mode is production
     // Production bundle is minified as compared to development bundle
-    mode: 'development'
+    mode: 'development',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            }
+        ]
+    }
 }
